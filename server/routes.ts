@@ -22,19 +22,11 @@ export async function registerRoutes(app: Express) {
             'Accept': 'application/json'
           },
           body: JSON.stringify({
-            type: "ticket",
+            ticket_type_id: "1", // Using a default ticket type ID
+            contacts: [{ email: ticketData.email }],
             ticket_attributes: {
-              ticket_type: "question",
-              title: ticketData.subject,
-              status: "submitted",
-              content: ticketData.message,
-            },
-            admin_assignee_id: process.env.INTERCOM_APP_ID,
-            customer: {
-              email: ticketData.email,
-              custom_attributes: {
-                client_id: ticketData.clientId
-              }
+              _default_title_: ticketData.subject,
+              _default_description_: `Client ID: ${ticketData.clientId}\n\n${ticketData.message}`
             }
           }),
         });
