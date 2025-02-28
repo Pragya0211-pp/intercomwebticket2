@@ -13,6 +13,17 @@ export async function registerRoutes(app: Express) {
 
       // Create ticket in Intercom using direct API call
       try {
+        const intercomPayload = {
+          ticket_type_id: "1", // Using a default ticket type ID
+          contacts: [{ email: ticketData.email }],
+          ticket_attributes: {
+            _default_title_: ticketData.subject,
+            _default_description_: `Client ID: ${ticketData.clientId}\n\n${ticketData.message}`
+          }
+        };
+
+        console.log("Sending Intercom request with payload:", JSON.stringify(intercomPayload, null, 2));
+
         const intercomResponse = await fetch('https://api.intercom.io/tickets', {
           method: 'POST',
           headers: {
@@ -21,21 +32,21 @@ export async function registerRoutes(app: Express) {
             'Intercom-Version': '2.10',
             'Accept': 'application/json'
           },
-          body: JSON.stringify({
-            ticket_type_id: "1", // Using a default ticket type ID
-            contacts: [{ email: ticketData.email }],
-            ticket_attributes: {
-              _default_title_: ticketData.subject,
-              _default_description_: `Client ID: ${ticketData.clientId}\n\n${ticketData.message}`
-            }
-          }),
+          body: JSON.stringify(intercomPayload),
+        });
+
+        const responseText = await intercomResponse.text();
+        console.log("Intercom API Response:", {
+          status: intercomResponse.status,
+          headers: Object.fromEntries(intercomResponse.headers.entries()),
+          body: responseText
         });
 
         if (!intercomResponse.ok) {
-          throw new Error(`Intercom API error: ${await intercomResponse.text()}`);
+          throw new Error(`Intercom API error: ${responseText}`);
         }
 
-        const intercomTicket = await intercomResponse.json();
+        const intercomTicket = await JSON.parse(responseText);
 
         // Return combined response
         res.status(201).json({
