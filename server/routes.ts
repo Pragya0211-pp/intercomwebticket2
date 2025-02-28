@@ -18,24 +18,24 @@ export async function registerRoutes(app: Express) {
           headers: {
             'Authorization': `Bearer ${process.env.INTERCOM_ACCESS_TOKEN}`,
             'Content-Type': 'application/json',
-            'Intercom-Version': '2.8',
+            'Intercom-Version': '2.10',
+            'Accept': 'application/json'
           },
           body: JSON.stringify({
-            ticket_type: "question",
-            title: ticketData.subject,
-            description: ticketData.message,
+            type: "ticket",
             ticket_attributes: {
+              ticket_type: "question",
+              title: ticketData.subject,
               status: "submitted",
+              content: ticketData.message,
             },
+            admin_assignee_id: process.env.INTERCOM_APP_ID,
             customer: {
               email: ticketData.email,
-            },
-            conversation_parts: [
-              {
-                body: `Client ID: ${ticketData.clientId}\n${ticketData.message}`,
-                admin_id: process.env.INTERCOM_APP_ID,
-              },
-            ],
+              custom_attributes: {
+                client_id: ticketData.clientId
+              }
+            }
           }),
         });
 
