@@ -22,7 +22,7 @@ export async function registerRoutes(app: Express) {
             'Accept': 'application/json'
           },
           body: JSON.stringify({
-            ticket_type_id: "1", // Using a default ticket type ID
+            ticket_type_id: "External Tickets", 
             contacts: [{ email: ticketData.email }],
             ticket_attributes: {
               _default_title_: ticketData.subject,
