@@ -10,32 +10,24 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
+  FormDescription,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { SiIntercom } from "react-icons/si";
 import { insertTicketSchema, type InsertTicket } from "@shared/schema";
 import { apiRequest } from "@/lib/queryClient";
 
 export default function Home() {
   const { toast } = useToast();
-  
+
   const form = useForm<InsertTicket>({
     resolver: zodResolver(insertTicketSchema),
     defaultValues: {
-      name: "",
       email: "",
+      clientId: "",
       subject: "",
       message: "",
-      priority: "normal",
     },
   });
 
@@ -66,7 +58,11 @@ export default function Home() {
         <Card>
           <CardHeader className="space-y-1">
             <div className="flex items-center gap-3">
-              <SiIntercom className="h-8 w-8 text-primary" />
+              <img 
+                src="/attached_assets/Wati-logo-default (2).png" 
+                alt="WATI Logo" 
+                className="h-8 w-auto"
+              />
               <CardTitle className="text-2xl font-bold">
                 Submit Support Ticket
               </CardTitle>
@@ -80,12 +76,16 @@ export default function Home() {
               >
                 <FormField
                   control={form.control}
-                  name="name"
+                  name="email"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Name</FormLabel>
+                      <FormLabel>Email</FormLabel>
                       <FormControl>
-                        <Input placeholder="John Doe" {...field} />
+                        <Input 
+                          type="email" 
+                          placeholder="your@email.com" 
+                          {...field} 
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -94,17 +94,19 @@ export default function Home() {
 
                 <FormField
                   control={form.control}
-                  name="email"
+                  name="clientId"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Email</FormLabel>
+                      <FormLabel>Client ID</FormLabel>
                       <FormControl>
                         <Input 
-                          type="email" 
-                          placeholder="john@example.com" 
+                          placeholder="Enter your Client ID or NA" 
                           {...field} 
                         />
                       </FormControl>
+                      <FormDescription>
+                        Enter your Client ID (a numeric key found in your WATI URL). If you don't have one, enter 'NA'.
+                      </FormDescription>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -117,32 +119,11 @@ export default function Home() {
                     <FormItem>
                       <FormLabel>Subject</FormLabel>
                       <FormControl>
-                        <Input placeholder="Brief description of the issue" {...field} />
+                        <Input 
+                          placeholder="Brief description of the issue" 
+                          {...field} 
+                        />
                       </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="priority"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Priority</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select priority" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          <SelectItem value="low">Low</SelectItem>
-                          <SelectItem value="normal">Normal</SelectItem>
-                          <SelectItem value="high">High</SelectItem>
-                          <SelectItem value="urgent">Urgent</SelectItem>
-                        </SelectContent>
-                      </Select>
                       <FormMessage />
                     </FormItem>
                   )}
