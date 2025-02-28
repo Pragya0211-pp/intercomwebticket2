@@ -59,7 +59,7 @@ export default function Home() {
           <CardHeader className="space-y-1">
             <div className="flex items-center gap-3">
               <img 
-                src="/attached_assets/Wati-logo-default (2).png" 
+                src="attached_assets/Wati-logo-default (2).png" 
                 alt="WATI Logo" 
                 className="h-8 w-auto"
               />
