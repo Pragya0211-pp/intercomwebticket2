@@ -8,6 +8,7 @@ export const tickets = pgTable("tickets", {
   clientId: text("client_id").notNull(),
   subject: text("subject").notNull(),
   message: text("message").notNull(),
+  mediaUrl: text("media_url"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
@@ -17,12 +18,14 @@ export const insertTicketSchema = createInsertSchema(tickets)
     clientId: true,
     subject: true,
     message: true,
+    mediaUrl: true,
   })
   .extend({
     email: z.string().email("Please enter a valid email address"),
     clientId: z.string().min(1, "Client ID is required"),
     subject: z.string().min(1, "Subject is required"),
     message: z.string().min(10, "Message must be at least 10 characters"),
+    mediaUrl: z.string().optional(),
   });
 
 export type InsertTicket = z.infer<typeof insertTicketSchema>;

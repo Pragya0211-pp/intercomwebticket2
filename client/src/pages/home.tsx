@@ -28,6 +28,7 @@ export default function Home() {
       clientId: "",
       subject: "",
       message: "",
+      mediaUrl: "",
     },
   });
 
@@ -64,7 +65,7 @@ export default function Home() {
                 className="h-8 w-auto"
               />
               <CardTitle className="text-2xl font-bold">
-                Submit Support Ticket
+                Submit Ticket
               </CardTitle>
             </div>
           </CardHeader>
@@ -142,6 +143,33 @@ export default function Home() {
                           {...field}
                         />
                       </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="mediaUrl"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Attachment</FormLabel>
+                      <FormControl>
+                        <Input 
+                          type="file"
+                          onChange={(e) => {
+                            const file = e.target.files?.[0];
+                            if (file) {
+                              // In a real implementation, you would upload the file
+                              // to a storage service and get back a URL
+                              field.onChange(file.name);
+                            }
+                          }}
+                        />
+                      </FormControl>
+                      <FormDescription>
+                        Upload screenshots or relevant files
+                      </FormDescription>
                       <FormMessage />
                     </FormItem>
                   )}
